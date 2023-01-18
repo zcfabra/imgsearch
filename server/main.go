@@ -18,7 +18,7 @@ func checkErr(err error) {
 
 func main() {
 
-	db, err := sql.Open("sqlite3", "../temp.sqlite")
+	db, err := sql.Open("sqlite3", "temp.sqlite")
 	checkErr(err)
 	stmt, err := db.Exec("SELECT * FROM test")
 	checkErr(err)
