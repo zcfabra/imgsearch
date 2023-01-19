@@ -14,7 +14,8 @@ def get_dims(inp: np.array):
     print(f"DIMENSIONS OF IMAGE: {inp.shape}")
 
 def get_efficientnet_chopped():
-    base=  torchvision.models.efficientnet_v2_l()
+    base = torchvision.models.efficientnet_v2_l(
+        torchvision.models.EfficientNet_V2_L_Weights)
     return nn.Sequential(*list(base.children())[:-1])
 def add_dir_to_db(dirname: str, c):
     x = os.listdir(dirname)
@@ -39,6 +40,9 @@ def add_file_embedding_to_db(file_path: str, c: Cursor):
         o_np = o.cpu().detach().numpy()
 
         c.execute("INSERT INTO test (name , arr) values (?,?)", (file_path, o_np))
+
+
+
 
 
 
