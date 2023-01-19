@@ -21,31 +21,18 @@ def main():
 
 	db = sql.connect("temp.sqlite", detect_types=sql.PARSE_DECLTYPES)
 	c = db.cursor()
+	sql.register_adapter(np.ndarray, utils.arr_to_text)
+	sql.register_converter("array", utils.text_to_arr)
 	c.execute(''' SELECT count(name) from sqlite_master WHERE type='table' AND name= 'test' ''')
 	if (c.fetchone()[0] ==1):
 		print("TABLE exists")
 	else:
 		print("TABLE DOES NOT EXIST")
-		sql.register_adapter(np.ndarray, utils.arr_to_text)
-		sql.register_converter("array", utils.text_to_arr)
-		c.execute("CREATE table test (arr array)")
+		c.execute("CREATE table test (name VARCHAR(255) PRIMARY KEY ,arr array)")
 
-	x = torch.tensor(cv2.imread(args[1]))
-	x = x.unsqueeze(0).permute(0,3,1,2).float() / 255
-	x= x.to(device)
-	assert x.shape[:2] == (1,3)
-	print(x.dtype, x.min(),x.max())
-	with torch.no_grad():
-		model = simsearch.get_efficientnet_chopped().to(device)
-		model.eval()
-		o = model(x)
-		print(o.shape)
-		o_np = o.cpu().detach().numpy()
-
-		c.execute("INSERT INTO test (arr) values (?)", (o_np, ))
-		db.commit()
-
-
+	simsearch.add_dir_to_db(args[1], c)
+	db.commit()
+	
 	
 
 

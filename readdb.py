@@ -7,9 +7,10 @@ def main():
     c = db.cursor()
     sql.register_adapter(np.ndarray, utils.arr_to_text)
     sql.register_converter("array", utils.text_to_arr)
-    c.execute("SELECT arr FROM test")
-    data = c.fetchone()[0]
-    print(data.shape)
+    c.execute("SELECT * FROM test")
+    data = c.fetchall()
+    for row in data:
+        print(row)
 
 
 
