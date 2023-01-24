@@ -22,10 +22,10 @@ func main() {
 	checkErr(err)
 	stmt, err := db.Exec("SELECT * FROM test")
 	checkErr(err)
-	fmt.Print("YOY")
 	fmt.Print(stmt)
 	app := fiber.New()
-	app.Post("/hit", func(c *fiber.Ctx) error {
+
+	app.Post("/addnew", func(c *fiber.Ctx) error {
 		err := c.JSON(c.Body())
 		if err != nil {
 			log.Fatal(err)

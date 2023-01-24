@@ -17,6 +17,7 @@ def get_efficientnet_chopped():
     base = torchvision.models.efficientnet_v2_l(
         torchvision.models.EfficientNet_V2_L_Weights)
     return nn.Sequential(*list(base.children())[:-1])
+
 def add_dir_to_db(dirname: str, c):
     x = os.listdir(dirname)
     for each in x:
@@ -25,6 +26,8 @@ def add_dir_to_db(dirname: str, c):
         print(os.path.isfile(path))
         if os.path.isfile(path):
             add_file_embedding_to_db(path, c)
+
+
 def add_file_embedding_to_db(file_path: str, c: Cursor):
     """DOES NOT COMMIT TO DB"""
     x = torch.tensor(cv2.imread(file_path))
